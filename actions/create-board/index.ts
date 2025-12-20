@@ -1,33 +1,41 @@
 'use server';
-import { auth } from "@clerk/nextjs";
-import { InputType, ReturnType } from "./types";
-import { db } from "@/lib/db";
-import { revalidatePath } from "next/cache";
-import { createSafeAction } from "@/lib/create-safe-action";
-import { CreateBoard } from "./schema";
+import { auth } from '@clerk/nextjs';
+import { InputType, ReturnType } from './types';
+import { db } from '@/lib/db';
+import { revalidatePath } from 'next/cache';
+import { createSafeAction } from '@/lib/create-safe-action';
+import { CreateBoard } from './schema';
+import { ACTION, ENTITY_TYPE } from '@prisma/client';
+import { createAuditLog } from '@/lib/create-audit-log';
 
-const handler=async(data:InputType):Promise<ReturnType>=>{
-	const {userId,orgId}=auth();
-	if(!userId || !orgId){
-		return{
-			error:"Unauthorized",
-		};
-	};
-	const {title,image}=data;
-	const [imageId, imageThumbUrl, imageFullUrl, imageLinkHTML, imageUserName] =
+const handler = async (data: InputType): Promise<ReturnType> => {
+  const { userId, orgId } = auth();
+  if (!userId || !orgId) {
+    return {
+      error: 'Unauthorized',
+    };
+  }
+  const { title, image } = data;
+  const [imageId, imageThumbUrl, imageFullUrl, imageLinkHTML, imageUserName] =
     image.split('|');
-	// console.log({imageId, imageThumbUrl, imageFullUrl, imageLinkHTML, imageUserName});
-	if(!imageId || !imageThumbUrl || !imageFullUrl || !imageLinkHTML || !imageUserName){
-		return{
-			error:"Missing field(s).Failed to create board.",
-		};
-	}
-	let board;
-	try{
-		board = await db.board.create({
+  // console.log({imageId, imageThumbUrl, imageFullUrl, imageLinkHTML, imageUserName});
+  if (
+    !imageId ||
+    !imageThumbUrl ||
+    !imageFullUrl ||
+    !imageLinkHTML ||
+    !imageUserName
+  ) {
+    return {
+      error: 'Missing field(s).Failed to create board.',
+    };
+  }
+  let board;
+  try {
+    board = await db.board.create({
       data: {
         title,
-		orgId,
+        orgId,
         imageId,
         imageThumbUrl,
         imageFullUrl,
@@ -35,14 +43,20 @@ const handler=async(data:InputType):Promise<ReturnType>=>{
         imageLinkHTML,
       },
     });
-	}catch(error){
-		return{
-			error:"Failed to create board",
-		};
-	}
-	revalidatePath(`/board/${board.id}`);
-	return{
-		data:board,
-	};
-}
-export const createBoard=createSafeAction(CreateBoard,handler);
+    await createAuditLog({
+      entityId: board.id,
+      entityType: ENTITY_TYPE.BOARD,
+      entityTitle: board.title,
+      action: ACTION.CREATE,
+    });
+  } catch (error) {
+    return {
+      error: 'Failed to create board',
+    };
+  }
+  revalidatePath(`/board/${board.id}`);
+  return {
+    data: board,
+  };
+};
+export const createBoard = createSafeAction(CreateBoard, handler);

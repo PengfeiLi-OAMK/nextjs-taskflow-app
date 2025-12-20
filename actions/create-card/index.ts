@@ -3,8 +3,11 @@
 import { auth } from '@clerk/nextjs';
 import { InputType, ReturnType } from './types';
 import { revalidatePath } from 'next/cache';
+import { ACTION, ENTITY_TYPE } from '@prisma/client';
+
 import { db } from '@/lib/db';
 import { createSafeAction } from '@/lib/create-safe-action';
+import { createAuditLog } from '@/lib/create-audit-log';
 import { CreateCard } from './schema';
 import { list } from 'unsplash-js/dist/methods/photos';
 
@@ -47,6 +50,13 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         listId,
         order: newOrder,
       },
+    });
+
+    await createAuditLog({
+    	entityId:card.id,
+    	entityType:ENTITY_TYPE.CARD,
+    	entityTitle:card.title,
+    	action:ACTION.CREATE,
     });
   } catch (error) {
     return { error: 'Failed to create list' };
