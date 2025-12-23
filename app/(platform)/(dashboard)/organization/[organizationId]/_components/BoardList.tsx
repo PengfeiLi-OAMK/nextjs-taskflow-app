@@ -6,6 +6,8 @@ import { auth } from '@clerk/nextjs';
 import { HelpCircle, User2 } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { MAX_FREE_BOARDS } from '@/constants/boards';
+import { getBoardCount } from '@/lib/org-limit';
 
 async function BoardList() {
   const { orgId } = auth();
@@ -22,6 +24,8 @@ async function BoardList() {
       createdAt: 'desc',
     },
   });
+
+  const usageCount = await getBoardCount();
 
   return (
     <div className="space-y-4">
@@ -47,7 +51,7 @@ async function BoardList() {
             className="aspect-video relative h-full w-full bg-muted rounded-sm flex flex-col gap-y-1 items-center justify-center hover:opacity-60 transition"
           >
             <p className="text-sm">Create new board</p>
-            <span className="text-xs">5 remaining</span>
+            <span className="text-xs">{`${MAX_FREE_BOARDS - usageCount} remaining`}</span>
             <Hint
               sideOffset={40}
               description={`Free Workspaces can have up to 5 open boards. For unlimited boards upgrade this workspace.`}
