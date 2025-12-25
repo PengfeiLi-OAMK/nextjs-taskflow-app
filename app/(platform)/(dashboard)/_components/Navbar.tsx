@@ -4,7 +4,6 @@ import { OrganizationSwitcher, UserButton } from '@clerk/nextjs'
 import { Plus } from 'lucide-react'
 import React from 'react'
 import MobileSidebar from './MobileSidebar'
-import Form from '../organization/[organizationId]/form'
 import { FormPopover } from '@/components/form/FormPopover'
 
 function Navbar() {
