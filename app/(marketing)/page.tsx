@@ -21,7 +21,7 @@ function MarketingPage() {
           No 1 task management tool
         </div>
         <h1 className="text-3xl md:text-6xl text-center text-neutral-800 mb-6">
-          TaskFlow helps team move
+          TaskFlow helps teams move
         </h1>
         <div
           className="text-3xl md:text-6xl bg-gradient-to-r from-fuchsia-600 to-pink-600 text-white rounded-md px-4 p-2
