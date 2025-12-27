@@ -100,7 +100,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 STRIPE_WEBHOOK_SECRET=...
 ```
 
-## Usage
+## ✨Usage
 
 - **Sign up/Login:** Create an account to get started.
 - **Create Organization:** Set up your workspace.
@@ -113,20 +113,27 @@ STRIPE_WEBHOOK_SECRET=...
 ### Workspace & Dashboard
 ![Dashboard](public/screenshots/workspace.png)
 ### Board Operations
-Creating Board
+
+- **Creating Board**
 ![Create Board](public/screenshots/createBoard.png)
-Drag & Drop Logic
-![Drag Drop 1](public/screenshots/dragAndDrop1.png)
-![Drag Drop 2](public/screenshots/dragAndDrop2.png)
+
+- **Drag & Drop Logic**
+![Drag Drop 1](public/screenshots/dragAndDrop.gif)
+![Drag Drop 2](public/screenshots/dragAndDrop2.gif)
 ### Card Details
-Card Modal
+
+- **Card Modal**
 ![Card Modal](public/screenshots/cardModal.png) 
-Activity Log
+
+- **Activity Log**
 ![Logs](public/screenshots/logs.png) 
+
 ### Pro Features & Billing
-Upgrade to Pro
+
+- **Upgrade to Pro**
 ![Checkout](public/screenshots/upgrade.png)
-Stripe Checkout
+
+- **Stripe Checkout**
 ![Checkout](public/screenshots/stripeCheckout.png)
 
 
